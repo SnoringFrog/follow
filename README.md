@@ -5,6 +5,7 @@ _|_|_|_|  _|    _|  _|  _|  _|    _|  _|      _|      _|
   _|      _|    _|  _|  _|  _|    _|    _|  _|  _|  _|
   _|        _|_|    _|  _|    _|_|        _|      _|
 ```
+---
 
 # follow
 
@@ -20,14 +21,15 @@ Clone this repository, copy `follow` wherever you'd like, source it, and use it:
 	$ cp follow/follow /path/to/follow
 	$ source /path/to/follow
 
-I recommend adding `source "/path/to/follow"` to your `.bashrc` instead of manually sourcing `follow` every time
+I recommend adding `source "/path/to/follow"` to your `.bashrc` instead of manually sourcing `follow` every time.
 
 ##Usage
 Here's a quick demonstration: 
+
 ![follow examples](/examples.png)
 
 ---
 
-Copyright (c) 2014 @SnoringFrog
+Copyright (c) 2014 [Ethan "SnoringFrog" Piekarski](https://github.com/snoringfrog)
 
-Modification/redistribution permitted under terms of the [Artistic License](http://www.perlfoundation.org/artistic_license_2_0) (Short version: do what you want as long as you say where the original came from)
+Modification/redistribution permitted under terms of the [Artistic License](http://www.perlfoundation.org/artistic_license_2_0) (Short version: do what you want as long as you say where the original came from).
