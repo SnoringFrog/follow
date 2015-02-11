@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# To use, source this file then use the command "follow"
+
+# Use after a command that ends with a destination to "follow" the command to that location
+# E.g., after a 'cp file newdir/filecopy', follow will take you to newdir/ 
+
+
+# Future improvements:
+#	Allow -v/--verbose to output successful directory change
+#	Enable use of more than one follow command per line
+#	Add help dialogue
+#	Allow run as 'follow [command with destination]' where command is run then followed (if possible)
+
+function follow {
+	func="${FUNCNAME[0]}"
+	current_command=`history 1`
+
+	#If follow is used inline with other commands, get the argument immediately before it
+	#Otherwise, get the final argument from the previous command
+	
+	stripped_cmd=`echo $current_command | perl -spe "s/[0-9]*\s*$func([^;]*(;|$))?//" -- -func=$func`
+	if [[ -n "$stripped_cmd" ]]; then
+		dest=`echo $current_command | perl -pe 's/\;//g;' -spe 's/(.*?)$func.*/\1/' -- -func=$func | awk '{print $NF}'`
+	else
+		dest=`history 2 | head -n 1 | awk '{print $NF}'`
+	fi
+
+	#If $dest is a valid destination, go to it
+	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
+	if [[ -e "$dest" ]]; then
+		if [[ -f "$dest" ]]; then
+			dest=`dirname "$dest"`
+		fi
+
+		if [[ -d "$dest" ]]; then
+			cd "$dest"
+		fi
+	else
+		>&2 echo "$func: cannot follow to \"$dest\""	
+	fi
+}	
+	#Old attempt at trying to handle multiple follow's in one line
+	#While current command contains "follow"...
+	#while [[ "$current_command" == *"$func"* ]]; do
+
+		#Get the argument before the first "follow"
+	#	dest=`echo $current_command | perl -spe 's/(.*?)$func.*/\1/' -- -func=$func | awk '{print $NF}'`
+	#	echo "Dest = $dest"
+	
+		#Go to that destination	
+	#	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
+	#	if [[ -e "$dest" ]]; then
+	#		if [[ -f "$dest" ]]; then
+	#			dest=`dirname "$dest"`
+	#		fi
+
+	#		if [[ -d "$dest" ]]; then
+	#			cd "$dest"
+	#		fi
+	#	else
+	#		>&2 echo "Cannot follow to \"$dest\""	
+	#	fi
+		
+		#Strip everything through the first "follow"
+	#	current_command=`echo $current_command | perl -spe 's/.*?$func//' -- -func=$func | sed -e 's/^ *//' -e 's/ *$//'`	
+	#	echo "Cmd = $current_command"
+
+	#done
