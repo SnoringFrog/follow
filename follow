@@ -7,6 +7,8 @@
 
 
 # Future improvements:
+#	Installation script that puts follow in (where's a good default?) and adds a source line to .bashrc
+#		Allows argument for custom follow placement
 #	Allow -v/--verbose to output successful directory change
 #	Enable use of more than one follow command per line
 #	Add help dialogue
@@ -16,15 +18,18 @@ function follow {
 	func="${FUNCNAME[0]}"
 	current_command=`history 1`
 
-	#If follow is used inline with other commands, get the argument immediately before it
+	#If follow is preceded inline with another command, get that command's final  argument
 	#Otherwise, get the final argument from the previous command
 	
-	stripped_cmd=`echo $current_command | perl -spe "s/[0-9]*\s*$func([^;]*(;|$))?//" -- -func=$func`
-	if [[ -n "$stripped_cmd" ]]; then
-		dest=`echo $current_command | perl -pe 's/\;//g;' -spe 's/(.*?)$func.*/\1/' -- -func=$func | awk '{print $NF}'`
+	pre_follow_args=`echo $current_command | perl -spe "s/[0-9]*\s*$func.*//" -- -func=$func`
+	if [[ -n "$pre_follow_args" ]]; then
+		args=`echo $current_command | perl -pe 's/\;//g;' -spe 's/(.*?)$func.*/\1/' -- -func=$func`
 	else
-		dest=`history 2 | head -n 1 | awk '{print $NF}'`
+		args=`history 2 | head -n 1`
 	fi
+
+	eval arg_array=(`echo $args`)	
+	dest="${arg_array[${#arg_array[@]}-1]}"	
 
 	#If $dest is a valid destination, go to it
 	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
