@@ -5,15 +5,6 @@
 # Use after a command that ends with a destination to "follow" the command to that location
 # E.g., after a 'cp file newdir/filecopy', follow will take you to newdir/ 
 
-
-# Future improvements:
-#	Installation script that puts follow in (where's a good default?) and adds a source line to .bashrc
-#		Allows argument for custom follow placement
-#	Allow -v/--verbose to output successful directory change
-#	Enable use of more than one follow command per line
-#	Add help dialogue
-#	Allow run as 'follow [command with destination]' where command is run then followed (if possible)
-
 function follow {
 	func="${FUNCNAME[0]}"
 	current_command=`history 1`

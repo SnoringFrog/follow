@@ -28,8 +28,10 @@ Here's a quick demonstration:
 
 ![follow examples](/examples.png)
 
+Another good use is when you `cd` into `/some/long/directory/but-accidentaly-add-a-file-at-the-end` so you just get a "not a directory" error. Use `follow` afterwards to get to that directory. Even if you catch your error before hitting enter, `follow` might be faster than backspacing.  
+
 ---
 
-Copyright (c) 2014 [Ethan "SnoringFrog" Piekarski](https://github.com/snoringfrog)
+Copyright :copyright: 2014 [Ethan "SnoringFrog" Piekarski](https://github.com/snoringfrog)
 
 Modification/redistribution permitted under terms of the [Artistic License](http://www.perlfoundation.org/artistic_license_2_0) (Short version: do what you want as long as you say where the original came from).
