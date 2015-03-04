@@ -25,7 +25,7 @@ function follow {
 	#If $dest is a valid destination, go to it
 	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
 	if [[ -e "$dest" ]]; then
-		if [[ -f "$dest" ]]; then
+		if [[ ! -d "$dest" ]]; then
 			dest=`dirname "$dest"`
 		fi
 
