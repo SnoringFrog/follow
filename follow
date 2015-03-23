@@ -24,7 +24,7 @@ function follow {
 
 	#If $dest is a valid destination, go to it
 	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
-	if [[ -e "$dest" ]]; then
+	if [[ -e "$dest" || -L "$dest" ]]; then
 		if [[ ! -d "$dest" ]]; then
 			dest=`dirname "$dest"`
 		fi
@@ -36,7 +36,12 @@ function follow {
 		>&2 echo "$func: cannot follow to \"$dest\""	
 	fi
 }	
+	# TODO: 
+	# Add option to not follow if symlink is broken?
+	# Allow multiple follows in one line
+
 	#Old attempt at trying to handle multiple follow's in one line
+	#Saved to reference for when I get around to supporting this
 	#While current command contains "follow"...
 	#while [[ "$current_command" == *"$func"* ]]; do
 
