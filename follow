@@ -13,7 +13,7 @@ function follow {
 	#Otherwise, get the final argument from the previous command
 	
 	pre_follow_args=`echo $current_command | perl -spe "s/[0-9]*\s*$func.*//" -- -func=$func`
-	if [[ -n "$pre_follow_args" ]]; then
+	if [[ ! -z "$pre_follow_args" ]]; then
 		args=`echo $current_command | perl -pe 's/\;//g;' -spe 's/(.*?)$func.*/\1/' -- -func=$func`
 	else
 		args=`history 2 | head -n 1`
