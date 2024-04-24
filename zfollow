@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/zsh
 
-# Bash implementation of follow; will not work with zsh
+# ZSH implementation of follow; will not work with bash
 
 # To use, source this file then use the command "follow"
 
@@ -8,21 +8,23 @@
 # E.g., after a 'cp file newdir/filecopy', follow will take you to newdir/ 
 
 function follow {
-	func="${FUNCNAME[0]}"
-	current_command=`history 1`
+	func="${funcstack[-1]}"
+	current_command="$history[${(%):-%h}]"
 
 	#If follow is preceded inline with another command, get that command's final  argument
 	#Otherwise, get the final argument from the previous command
 	
-	pre_follow_args=`echo $current_command | perl -spe "s/[0-9]*\s*$func.*//" -- -func=$func`
+	pre_follow_args=$(echo $current_command | perl -spe 's/[0-9]*\s*$func.*//' -- -func=$func)
+	echo "PFE:$pre_follow_args"
 	if [[ ! -z "$pre_follow_args" ]]; then
 		args=`echo $current_command | perl -pe 's/\;//g;' -spe 's/(.*?)$func.*/\1/' -- -func=$func`
 	else
-		args=`history 2 | head -n 1`
+		args=`history -1`
+		#args=`history 2 | head -n 1`
 	fi
 
-	eval arg_array=(`echo $args`)
-	dest="${arg_array[${#arg_array[@]}-1]}"	
+	arg_array=( ${(z)args} )
+	dest="${arg_array[-1]}"	
 
 	#If $dest is a valid destination, go to it
 	dest="`eval echo ${dest//>}`" #expand ~, strip out potentially dangerous >
@@ -41,6 +43,9 @@ function follow {
 	# TODO: 
 	# Add option to not follow if symlink is broken?
 	# Allow multiple follows in one line
+	# How do I handle the differences necessary for bash vs zsh? Can a make configure install handle that?
+	#	or does the function itself need to check?
+	#	Args diff in zsh: $func, $current_command, $args (in the else), $arg_array, $dest
 
 	#Old attempt at trying to handle multiple follow's in one line
 	#Saved to reference for when I get around to supporting this
